@@ -43,8 +43,30 @@ dependencies {
     // https://mvnrepository.com/artifact/nz.net.ultraq.thymeleaf/thymeleaf-layout-dialect
     implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.3.0'
 
+
+    //QueryDSL 사용 설정 부분 =================== 버전, jakarta 설정 확인
+    implementation 'jakarta.annotation:jakarta.annotation-api'
+    implementation 'com.querydsl:querydsl-jpa:5.1.0:jakarta'
+
+    annotationProcessor 'com.querydsl:querydsl-apt:5.1.0:jakarta'
+    annotationProcessor 'jakarta.annotation:jakarta.annotation-api'
+    annotationProcessor 'jakarta.persistence:jakarta.persistence-api'
+
+    // //QueryDSL 사용 설정 부분 ===================
 }
 
 tasks.named('test') {
     useJUnitPlatform()
 }
+//QueryDSL 사용 설정 부분 ===================
+sourceSets {
+    main {
+        java {
+            srcDirs = [
+                    "$projectDir/src/main/java", "$buildDir/generated/querydsl"
+            ]
+        }
+    }
+}
+
+//QueryDSL 사용 설정 부분 ===================

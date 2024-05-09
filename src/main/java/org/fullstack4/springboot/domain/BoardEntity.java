@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @Builder
@@ -24,4 +26,12 @@ public class BoardEntity extends BaseEntity{
     private String content;
     @Column(length = 10, nullable = true)
     private String display_date;
+
+    public void modify(String user_id, String title, String content, String display_date) {
+        this.user_id = user_id;
+        this.title = title;
+        this.content = content;
+        this.display_date = display_date;
+        super.setModify_date(LocalDateTime.now());
+    }
 }
