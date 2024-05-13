@@ -117,4 +117,16 @@ public class BoardRepositoryTest {
         log.info("BoardRepositoryTest >> testList End");
         log.info("===========================");
     }
+
+    @Test
+    public void testSearch() {
+        log.info("===========================");
+        log.info("BoardRepositoryTest >> testSearch Start");
+
+        PageRequest pageable = PageRequest.of(1, 10, Sort.by("idx").descending());
+        boardRepository.search(pageable);
+
+        log.info("BoardRepositoryTest >> testSearch End");
+        log.info("===========================");
+    }
 }

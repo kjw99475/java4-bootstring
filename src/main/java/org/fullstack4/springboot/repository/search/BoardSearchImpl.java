@@ -1,5 +1,6 @@
 package org.fullstack4.springboot.repository.search;
 
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.JPQLQuery;
 import lombok.extern.log4j.Log4j2;
 import org.fullstack4.springboot.domain.BoardEntity;
@@ -25,6 +26,17 @@ public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardS
         QBoardEntity qBoard = QBoardEntity.boardEntity; //QBoardEntity 객체 생성
         JPQLQuery<BoardEntity> query = from(qBoard);    //SELECT ... FROM QboardEntity --> tbl_board
 
+        //쿼리 내부에서 파라미터 입력
+        //and로 묶이는 경우
+//        query.where(qBoard.title.contains("제목"));
+//        query.where(qBoard.title.like("제목"));
+
+        //or로 묶는 경우 (where 괄호로 묶는 경우)
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        booleanBuilder.or(qBoard.title.contains("제목"));
+        booleanBuilder.or(qBoard.content.contains("제목"));
+        query.where(booleanBuilder);
+
         //paging
         this.getQuerydsl().applyPagination(pageable, query);
 
@@ -37,6 +49,29 @@ public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardS
 
         log.info("BoardSearchImpl >> search END");
         log.info("=============================");
+        return null;
+    }
+
+    @Override
+    public Page<BoardEntity> search2(Pageable pageable, String[] types, String search_keyword) {
+        QBoardEntity qBoard = QBoardEntity.boardEntity;
+        JPQLQuery<BoardEntity> query = from(qBoard);
+
+        if (types != null && types.length > 0 && search_keyword != null && search_keyword != ""){
+            BooleanBuilder booleanBuilder = new BooleanBuilder();
+            //type: t=제목, c=내용, w=사용자아이디
+        for (String type : types) {
+            switch (type) {
+                case "t":
+                    booleanBuilder.or(qBoard.title.like( "%"+search_keyword+ "%" ));
+                case "c":
+                    booleanBuilder.or(qBoard.content.like( "%"+search_keyword+ "%" ));
+                case "w":
+                    booleanBuilder.or(qBoard.user_id.like( "%"+search_keyword+ "%" ));
+            }
+        }
+        }
+
         return null;
     }
 }
