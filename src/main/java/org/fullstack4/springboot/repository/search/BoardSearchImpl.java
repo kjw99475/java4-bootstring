@@ -6,6 +6,7 @@ import lombok.extern.log4j.Log4j2;
 import org.fullstack4.springboot.domain.BoardEntity;
 import org.fullstack4.springboot.domain.QBoardEntity;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
@@ -49,7 +50,8 @@ public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardS
 
         log.info("BoardSearchImpl >> search END");
         log.info("=============================");
-        return null;
+
+        return new PageImpl<>(boards, pageable, total);
     }
 
     @Override
@@ -60,18 +62,27 @@ public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardS
         if (types != null && types.length > 0 && search_keyword != null && search_keyword != ""){
             BooleanBuilder booleanBuilder = new BooleanBuilder();
             //type: t=제목, c=내용, w=사용자아이디
-        for (String type : types) {
-            switch (type) {
-                case "t":
-                    booleanBuilder.or(qBoard.title.like( "%"+search_keyword+ "%" ));
-                case "c":
-                    booleanBuilder.or(qBoard.content.like( "%"+search_keyword+ "%" ));
-                case "w":
-                    booleanBuilder.or(qBoard.user_id.like( "%"+search_keyword+ "%" ));
+            for (String type : types) {
+                switch (type) {
+                    case "t":
+                        booleanBuilder.or(qBoard.title.like( "%"+search_keyword+ "%" ));
+                    case "c":
+                        booleanBuilder.or(qBoard.content.like( "%"+search_keyword+ "%" ));
+                    case "w":
+                        booleanBuilder.or(qBoard.user_id.like( "%"+search_keyword+ "%" ));
+                }
             }
+            query.where(booleanBuilder);
         }
-        }
+        this.getQuerydsl().applyPagination(pageable, query);
 
-        return null;
+        log.info("query : {}", query);
+        List<BoardEntity> boards = query.fetch();
+        int total = (int)query.fetchCount();    //기본 리턴타입 long
+
+        log.info("boards : {}", boards);
+        log.info("total : {}", total);
+
+        return new PageImpl<>(boards, pageable, total);
     }
 }

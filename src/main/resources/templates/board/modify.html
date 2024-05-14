@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+            layout:decorate="~{layout/basic.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+
+    <div class="col">
+        <div class="card">
+            <div class="card-header">
+                게시판 - 수정
+            </div>
+            <div class="card-body">
+                <form name="frmModify" action="/board/modify" method="post">
+                <h5 class="card-title"></h5>
+                    <input type="hidden" name="idx" class="form-control" th:value="${dto.idx}">
+
+                <div class="input-group mb3">
+                    <span class="input-group-text">제목</span>
+                    <input type="text" name="title" class="form-control" th:value="${dto.title}">
+                </div>
+
+                <div class="input-group mb3">
+                    <span class="input-group-text">내용</span>
+                    <textarea name="content" class="form-control col-sm-5" rows="5">[[${dto.content}]]</textarea>
+                </div>
+
+                <div class="input-group mb3">
+                    <span class="input-group-text">작성자</span>
+                    <input type="text" name="user_id" class="form-control" th:value="${dto.user_id}">
+                </div>
+
+                <div class="input-group mb3">
+                    <span class="input-group-text">등록일</span>
+                                        <input type="text" name="display_date" class="form-control" th:value="${dto.display_date}">
+                </div>
+
+
+                <div class="my-4">
+                    <div class="float-end" th:with="link=${pageRequestDTO.getLinkParams()}">
+                        <a th:href="|@{/board/list}?${link}|" class="text-decoration-none">
+                            <button type="button" class="btn btn-primary">목록</button>
+                        </a>
+                        <a>
+                            <button type="submit" class="btn btn-primary">수정완료</button>
+                        </a>
+                    </div>
+                </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!--<script layout:fragment="script" th:inline="javascript">-->
+<!--    console.log("script.................")-->
+<!--</script>-->
+
+</body>
+</html>

@@ -2,6 +2,8 @@ package org.fullstack4.springboot.service;
 
 import lombok.extern.log4j.Log4j2;
 import org.fullstack4.springboot.DTO.BoardDTO;
+import org.fullstack4.springboot.DTO.PageRequestDTO;
+import org.fullstack4.springboot.DTO.PageResponseDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,6 +14,17 @@ public class BoardServiceTests {
     @Autowired
     private BoardServiceIf boardService;
 
+    @Test
+    public void testList() {
+        PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
+                .page(1)
+                .page_size(10)
+                .build();
+
+        PageResponseDTO<BoardDTO> responseDTO = boardService.list(pageRequestDTO);
+        log.info("==============pagerequestDTO", pageRequestDTO);
+        log.info("==============responseDTO", responseDTO);
+    }
     @Test
     public void testRegist() {
         log.info("===========================");

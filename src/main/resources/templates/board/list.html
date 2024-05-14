@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+            layout:decorate="~{layout/basic.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+
+    <div class="col">
+        <div class="card">
+            <div class="card-header">
+                게시판
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Board List</h5>
+
+
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">인덱스</th>
+                        <th scope="col">제목</th>
+                        <th scope="col">작성자</th>
+                        <th scope="col">노출일자</th>
+                    </tr>
+                    </thead>
+                    <tbody th:with="link=${pageRequestDTO.getLinkParams()}">
+
+                        <tr th:each="dto:${pageResponseDTO.dtoList}">
+                            <th scope="row">[[${dto.idx}]]</th>
+                            <td><a th:href="|@{/board/view(idx=${dto.idx})}&${link}|">[[${dto.title}]]</a></td>
+                            <td>[[${dto.user_id}]]</td>
+                            <td>[[${dto.reg_date}]]</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+
+
+
+
+
+            </div>
+        </div>
+
+
+
+
+
+    </div>
+
+</div>
+
+<!--<script layout:fragment="script" th:inline="javascript">-->
+<!--    console.log("script.................")-->
+<!--</script>-->
+
+</body>
+</html>
